@@ -15,14 +15,11 @@ class GreenhouseEnvironment(gym.Env):
         self.initial_temperature = 25.0
         self.initial_humidity = 50.0
 
-        self.max_steps = 100
-        self.current_step = 0
 
         self.temperature = self.initial_temperature
         self.humidity = self.initial_humidity
 
     def reset(self):
-        self.current_step = 0
         self.temperature = self.initial_temperature
         self.humidity = self.initial_humidity
         return np.array([self.temperature, self.humidity])
@@ -42,14 +39,9 @@ class GreenhouseEnvironment(gym.Env):
         # Calculate reward: negative L1 distance to target temperature and humidity
         reward = -np.abs(self.temperature - self.target_temperature) - np.abs(self.humidity - self.target_humidity)
 
-        # Check if the maximum number of steps is reached
-        done = self.current_step >= self.max_steps
-
-        # Increment step count
-        self.current_step += 1
 
         # Return the next observation, reward, whether the episode is done, and additional information
-        return np.array([self.temperature, self.humidity]), reward, done, {}
+        return np.array([self.temperature, self.humidity]), reward, {}
 
 # Expert Controller (Heuristic)
 def expert_controller(observation):
